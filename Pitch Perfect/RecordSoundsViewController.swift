@@ -11,15 +11,22 @@ import AVFoundation
 
 class RecordSoundsViewController: UIViewController, AVAudioRecorderDelegate {
     
+    // Audio Recorder
     var audioRecorder:AVAudioRecorder!
+    
+    // Recorded Audio Model
     var recordedAudio:RecordedAudio!
 
+    // Microphone image
     let microphone_recording_image = UIImage(named: "microphone") as UIImage?
+    
+    // Stop recording image
     let stop_recording_image = UIImage(named: "stop-recording") as UIImage?
     
-    var clickCounter:Int = 0
-    
+    // recording label
     @IBOutlet weak var lbl_recording: UILabel!
+    
+    // microphone button and stop recording button
     @IBOutlet weak var btn_recording: UIButton!
     
     override func viewDidLoad() {
@@ -32,12 +39,9 @@ class RecordSoundsViewController: UIViewController, AVAudioRecorderDelegate {
         // Dispose of any resources that can be recreated.
     }
 
-
     @IBAction func AudioRecord(sender: UIButton) {
-        // TODO: change Icon to stop icon
-        self.clickCounter = self.clickCounter + 1
-        println("Hello Recorder: \(self.clickCounter)")
         
+        // Swap state that helps to show
         self.lbl_recording.hidden = !self.lbl_recording.hidden
         
         if self.lbl_recording.hidden{
@@ -62,17 +66,28 @@ class RecordSoundsViewController: UIViewController, AVAudioRecorderDelegate {
             
             let dirPath = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as! String
             
+            // Get current Date and Time
             let currentDateTime = NSDate()
+            
+            // Create Date Formatter Instance
             let formatter = NSDateFormatter()
+            
+            // Set Date format
             formatter.dateFormat = "ddMMyyyy-HHmmss"
-            let recordingName = formatter.stringFromDate(currentDateTime)+".wav"
+            
+            // Build DateTime String formation with Extension *.wav
+            let recordingName = formatter.stringFromDate(currentDateTime) + ".wav"
+            
+            // Construct Path Array
             let pathArray = [dirPath, recordingName]
             let filePath = NSURL.fileURLWithPathComponents(pathArray)
             println(filePath)
             
+            // Create Audio Record Session Instance
             var session = AVAudioSession.sharedInstance()
             session.setCategory(AVAudioSessionCategoryPlayAndRecord, error: nil)
             
+            // Create Audio Recorder Instance with delegate reference to self pointer
             audioRecorder = AVAudioRecorder(URL: filePath, settings: nil, error: nil)
             audioRecorder.delegate = self
             audioRecorder.meteringEnabled = true
@@ -87,7 +102,7 @@ class RecordSoundsViewController: UIViewController, AVAudioRecorderDelegate {
         
         if flag{
  
-            // initiliaze recordedAudio and fill it with values
+            // initiliaze recordedAudio and fill with audio file values
             recordedAudio = RecordedAudio()
             recordedAudio.filePathURL = recorder.url
             recordedAudio.title = recorder.url.lastPathComponent
@@ -103,11 +118,19 @@ class RecordSoundsViewController: UIViewController, AVAudioRecorderDelegate {
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        
+        // Check if segue identifier is stop_recording_segue only
         if(segue.identifier == "stop_recording_segue"){
+            // Create an Instance from PlaySoundsViewController
             let PlayAudioVC:PlaySoundsViewController = segue.destinationViewController as! PlaySoundsViewController
+            
+            // Transform data from sender(AnyObject) into RecordedAudio(NSObject)
             let data = sender as! RecordedAudio
+            
+            // Pass data to PlaySoundsViewController Before segue performed
             PlayAudioVC.receivedAudio = data
         }
     }
+    
 }
 
