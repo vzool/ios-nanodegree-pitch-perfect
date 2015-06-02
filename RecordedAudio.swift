@@ -12,4 +12,9 @@ class RecordedAudio{
     
     var title:String!
     var filePathURL:NSURL!
+    
+    init(){
+        title = ""
+        filePathURL = nil
+    }
 }
