@@ -42,13 +42,13 @@ class RecordSoundsViewController: UIViewController, AVAudioRecorderDelegate {
     @IBAction func AudioRecord(sender: UIButton) {
         
         // Swap state that helps to show
-        self.lbl_recording.hidden = !self.lbl_recording.hidden
+        lbl_recording.hidden = !lbl_recording.hidden
         
-        if self.lbl_recording.hidden{
+        if lbl_recording.hidden{
             
             // Change Record Button image to stop image
             
-            self.btn_recording.setImage(self.microphone_recording_image, forState: .Normal)
+            btn_recording.setImage(microphone_recording_image, forState: .Normal)
             
             // Stop Audio Recorder
             
@@ -60,7 +60,7 @@ class RecordSoundsViewController: UIViewController, AVAudioRecorderDelegate {
             
             // Change Record Button image to microphone image
             
-            self.btn_recording.setImage(self.stop_recording_image, forState: .Normal)
+            btn_recording.setImage(stop_recording_image, forState: .Normal)
             
             // Record Audio Section
             
@@ -81,8 +81,7 @@ class RecordSoundsViewController: UIViewController, AVAudioRecorderDelegate {
             // Construct Path Array
             let pathArray = [dirPath, recordingName]
             let filePath = NSURL.fileURLWithPathComponents(pathArray)
-            println(filePath)
-            
+
             // Create Audio Record Session Instance
             var session = AVAudioSession.sharedInstance()
             session.setCategory(AVAudioSessionCategoryPlayAndRecord, error: nil)
@@ -98,8 +97,6 @@ class RecordSoundsViewController: UIViewController, AVAudioRecorderDelegate {
     
     func audioRecorderDidFinishRecording(recorder: AVAudioRecorder!, successfully flag: Bool) {
         
-        println("# FINISH RECORDING #")
-        
         if flag{
  
             // initiliaze recordedAudio and fill with audio file values
@@ -108,7 +105,7 @@ class RecordSoundsViewController: UIViewController, AVAudioRecorderDelegate {
             recordedAudio.title = recorder.url.lastPathComponent
             
             // Transition to next window
-            self.performSegueWithIdentifier("stop_recording_segue", sender: recordedAudio)
+            performSegueWithIdentifier("stop_recording_segue", sender: recordedAudio)
             
         }else{
             

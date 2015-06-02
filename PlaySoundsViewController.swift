@@ -35,41 +35,43 @@ class PlaySoundsViewController: UIViewController {
     
     // Playing slow outlet action
     @IBAction func playSlowly(sender: UIButton) {
-        println("Slowly Mama")
         playingWithRate(0.5)
     }
     
     // Playing fast outlet action
     @IBAction func playFast(sender: AnyObject) {
-        println("Quick Mama")
         playingWithRate(1.5)
     }
     
     // playing audio file with a specific speed rate
     func playingWithRate(rate: Float){
-        player.stop()
+        
+        stopAll()
+        
         player.rate = rate
-        player.currentTime = 0.0
         player.play()
     }
     
     @IBAction func stopPlaying(sender: AnyObject) {
         
-        println("Stop Mama")
-        
+        // It's safe to stop anything and then start over
+        stopAll()
+    }
+    
+    // To prevent overlap stop and reset player and audio engine
+    func stopAll(){
         player.stop()
+        audioEngine.stop()
+        audioEngine.reset()
+        player.currentTime = 0.0
     }
     
     @IBAction func ChipmunkPlay(sender: AnyObject) {
-        
-        println("# ChipmunkPlay #")
         
         playAudioWithVariablePitch(1000)
     }
     
     @IBAction func RobotSound(sender: UIButton) {
-        
-        println("# Robot Sound #")
         
         playAudioWithVariablePitch(-1000)
     }
@@ -78,9 +80,7 @@ class PlaySoundsViewController: UIViewController {
     func playAudioWithVariablePitch(pitch: Float){
         
         // It's safe to stop anything and then start over
-        player.stop()
-        audioEngine.stop()
-        audioEngine.reset()
+        stopAll()
         
         // create a new Player Node and attached to AudioEngine
         var audioPlayerNode = AVAudioPlayerNode()
