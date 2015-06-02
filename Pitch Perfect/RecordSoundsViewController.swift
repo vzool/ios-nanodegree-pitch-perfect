@@ -99,10 +99,8 @@ class RecordSoundsViewController: UIViewController, AVAudioRecorderDelegate {
         
         if flag{
  
-            // initiliaze recordedAudio and fill with audio file values
-            recordedAudio = RecordedAudio()
-            recordedAudio.filePathURL = recorder.url
-            recordedAudio.title = recorder.url.lastPathComponent
+            // initiliaze recordedAudio and fill with audio file values            
+            recordedAudio = RecordedAudio(filePathUrl: recorder.url, title: recorder.url.lastPathComponent!)
             
             // Transition to next window
             performSegueWithIdentifier("stop_recording_segue", sender: recordedAudio)
